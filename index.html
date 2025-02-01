@@ -8,7 +8,6 @@
       body { font-family: Arial; padding: 20px; text-align: center; }
       .balance { font-size: 20px; margin: 20px; }
       .avatar { border-radius: 50%; width: 100px; height: 100px; margin-bottom: 20px; }
-      .user-info { font-size: 16px; margin-top: 20px; }
       .error { color: red; font-size: 18px; }
     </style>
   </head>
@@ -18,8 +17,6 @@
     <p class="balance">Ваш баланс: <span id="balance">0</span> монет</p>
     <button onclick="addCoins()">Пополнить счёт</button>
 
-    <!-- Добавляем место для отображения информации о пользователе -->
-    <div id="user-info" class="user-info"></div>
     <div id="error-message" class="error" style="display:none;"></div>
 
     <script>
@@ -30,17 +27,11 @@
         if (user && user.photo_url) {
           const avatarUrl = user.photo_url; // Получаем аватарку пользователя
 
-          // Отображаем данные пользователя на странице
-          const userInfoDiv = document.getElementById('user-info');
-          userInfoDiv.innerHTML = `
-            <strong>Имя:</strong> ${user.first_name || 'Неизвестно'} <br>
-            <strong>Фамилия:</strong> ${user.last_name || 'Неизвестно'} <br>
-            <strong>Юзернейм:</strong> ${user.username || 'Неизвестно'} <br>
-            <strong>Аватар:</strong> ${avatarUrl ? '<img src="' + avatarUrl + '" alt="Аватарка пользователя" class="avatar">' : 'Нет аватарки'}
-          `;
-          
           // Устанавливаем аватарку в img элемент
           document.getElementById('avatar').src = avatarUrl;
+
+          // Выводим 123 в консоль, чтобы убедиться, что скрипт работает
+          console.log('123');
         } else {
           // Если данные пользователя или аватарка не получены, показываем ошибку
           document.getElementById('error-message').textContent = 'Не удалось загрузить данные о пользователе.';
