@@ -28,14 +28,14 @@
       console.log("Скрипт загружен");
 
       // Проверяем, доступен ли Telegram WebApp
-      if (window.tg && window.tg.WebApp) {
+      if (window.Telegram && window.Telegram.WebApp) {
         console.log("Telegram WebApp доступен");
 
         // Инициализируем Telegram WebApp
-        window.tg.WebApp.init();
+        window.Telegram.WebApp.ready();
 
         // Получаем имя пользователя
-        const userName = window.tg.initDataUnsafe.user.first_name;
+        const userName = window.Telegram.WebApp.initDataUnsafe.user.first_name;
 
         // Если имя пользователя существует, меняем текст на странице
         if (userName) {
