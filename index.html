@@ -27,10 +27,13 @@
       if (window.Telegram && window.Telegram.WebApp) {
         console.log("Telegram WebApp доступен");
 
-        // Получаем данные о пользователе
-        const user = window.Telegram.WebApp.user; // Получаем данные о пользователе
+        // Ожидаем загрузки приложения и получения данных пользователя
+        window.Telegram.WebApp.ready();
 
-        // Логирование данных о пользователе
+        // Получаем данные о пользователе после готовности WebApp
+        const user = window.Telegram.WebApp.user;
+        console.log("Данные пользователя:", user);
+
         if (user && user.first_name) {
           console.log("Имя пользователя:", user.first_name);
           document.getElementById('user-name').textContent = user.first_name; // Показываем имя пользователя на странице
