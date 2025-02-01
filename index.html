@@ -26,7 +26,7 @@
         width: 100px;
         height: 100px;
         border-radius: 50%;
-        margin-bottom: 20px;
+        margin: 0 auto 20px;
         background-color: #ccc;
         overflow: hidden;
       }
@@ -58,10 +58,9 @@
       }
       .buttons {
         display: flex;
-        justify-content: space-between;
+        justify-content: center;
+        gap: 10px;
         margin-top: 40px;
-        width: 100%;
-        max-width: 300px;
       }
       .buttons button {
         padding: 10px 20px;
@@ -85,6 +84,25 @@
       }
       .page.active {
         display: flex;
+      }
+      .menu {
+        position: fixed;
+        bottom: 20px;
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+      }
+      .menu button {
+        padding: 10px 20px;
+        font-size: 16px;
+        border: none;
+        border-radius: 5px;
+        background-color: #28a745;
+        color: white;
+        cursor: pointer;
+      }
+      .menu button:hover {
+        background-color: #218838;
       }
     </style>
   </head>
@@ -111,6 +129,11 @@
         <h1>Вторая страница</h1>
         <p>Здесь пока пусто.</p>
       </div>
+    </div>
+
+    <div class="menu">
+      <button onclick="showPage(1)">Главная</button>
+      <button onclick="showPage(2)">Вторая</button>
     </div>
 
     <script>
@@ -140,10 +163,8 @@
       }
 
       // Переключение между страницами
-      let currentPage = 1;
-      const pages = document.querySelectorAll('.page');
-
       function showPage(pageNumber) {
+        const pages = document.querySelectorAll('.page');
         pages.forEach((page, index) => {
           page.classList.toggle('active', index + 1 === pageNumber);
         });
@@ -166,12 +187,10 @@
         const swipeThreshold = 50; // Минимальная дистанция для свайпа
         if (touchEndX < touchStartX - swipeThreshold) {
           // Свайп влево
-          currentPage = Math.min(currentPage + 1, pages.length);
-          showPage(currentPage);
+          showPage(2);
         } else if (touchEndX > touchStartX + swipeThreshold) {
           // Свайп вправо
-          currentPage = Math.max(currentPage - 1, 1);
-          showPage(currentPage);
+          showPage(1);
         }
       }
     </script>
