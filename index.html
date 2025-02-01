@@ -3,26 +3,115 @@
     <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, proxy-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <title>Привет, пользователь!</title>
+    <title>Telegram WebApp</title>
     <script async src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
       body {
         font-family: Arial, sans-serif;
         display: flex;
+        flex-direction: column;
         justify-content: center;
         align-items: center;
         height: 100vh;
         margin: 0;
         background-color: #f0f0f0;
+        overflow: hidden;
+      }
+      .container {
+        text-align: center;
+        width: 100%;
+        max-width: 400px;
+      }
+      .avatar {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        margin-bottom: 20px;
+        background-color: #ccc;
+        overflow: hidden;
+      }
+      .avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
       }
       h1 {
-        font-size: 24px;
+        font-size: 18px;
         color: #333;
+        margin: 0;
+      }
+      .points {
+        display: flex;
+        align-items: baseline;
+        justify-content: center;
+        margin-top: 20px;
+      }
+      .points .number {
+        font-size: 48px;
+        font-weight: bold;
+        color: #333;
+      }
+      .points .label {
+        font-size: 14px;
+        color: #666;
+        margin-left: 5px;
+      }
+      .buttons {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 40px;
+        width: 100%;
+        max-width: 300px;
+      }
+      .buttons button {
+        padding: 10px 20px;
+        font-size: 16px;
+        border: none;
+        border-radius: 5px;
+        background-color: #007bff;
+        color: white;
+        cursor: pointer;
+      }
+      .buttons button:hover {
+        background-color: #0056b3;
+      }
+      .page {
+        display: none;
+        width: 100%;
+        height: 100%;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+      .page.active {
+        display: flex;
       }
     </style>
   </head>
   <body>
-    <h1>Привет, пользователь!</h1>
+    <div class="page active" id="page1">
+      <div class="container">
+        <div class="avatar">
+          <img id="user-avatar" src="" alt="Аватар">
+        </div>
+        <h1 id="greeting">Привет, пользователь!</h1>
+        <div class="points">
+          <div class="number">0</div>
+          <div class="label">points</div>
+        </div>
+        <div class="buttons">
+          <button onclick="alert('Депозит')">Депозит</button>
+          <button onclick="alert('Вывод')">Вывод</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="page" id="page2">
+      <div class="container">
+        <h1>Вторая страница</h1>
+        <p>Здесь пока пусто.</p>
+      </div>
+    </div>
 
     <script>
       console.log("Скрипт загружен");
@@ -34,17 +123,56 @@
         // Инициализируем Telegram WebApp
         window.Telegram.WebApp.ready();
 
-        // Получаем имя пользователя
-        const userName = window.Telegram.WebApp.initDataUnsafe.user.first_name;
+        // Получаем данные пользователя
+        const user = window.Telegram.WebApp.initDataUnsafe.user;
 
         // Если имя пользователя существует, меняем текст на странице
-        if (userName) {
-          document.querySelector('h1').textContent = `Привет, ${userName}!`;
+        if (user) {
+          document.getElementById('greeting').textContent = `Привет, ${user.first_name}!`;
+          if (user.photo_url) {
+            document.getElementById('user-avatar').src = user.photo_url;
+          }
         } else {
-          console.log("Имя пользователя не найдено.");
+          console.log("Данные пользователя не найдены.");
         }
       } else {
         console.log("Telegram WebApp недоступен.");
+      }
+
+      // Переключение между страницами
+      let currentPage = 1;
+      const pages = document.querySelectorAll('.page');
+
+      function showPage(pageNumber) {
+        pages.forEach((page, index) => {
+          page.classList.toggle('active', index + 1 === pageNumber);
+        });
+      }
+
+      // Обработка свайпов
+      let touchStartX = 0;
+      let touchEndX = 0;
+
+      document.body.addEventListener('touchstart', (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+      });
+
+      document.body.addEventListener('touchend', (e) => {
+        touchEndX = e.changedTouches[0].screenX;
+        handleSwipe();
+      });
+
+      function handleSwipe() {
+        const swipeThreshold = 50; // Минимальная дистанция для свайпа
+        if (touchEndX < touchStartX - swipeThreshold) {
+          // Свайп влево
+          currentPage = Math.min(currentPage + 1, pages.length);
+          showPage(currentPage);
+        } else if (touchEndX > touchStartX + swipeThreshold) {
+          // Свайп вправо
+          currentPage = Math.max(currentPage - 1, 1);
+          showPage(currentPage);
+        }
       }
     </script>
   </body>
