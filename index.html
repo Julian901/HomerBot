@@ -20,28 +20,35 @@
     <div id="error-message" class="error" style="display:none;"></div>
 
     <script>
-      console.log('Скрипт загружен'); // Логируем, что скрипт загружен
+      console.log('Скрипт загружен'); // Логирование загрузки скрипта
 
+      // Проверка, работает ли приложение через Telegram Web App
       if (window.Telegram && window.Telegram.WebApp) {
         console.log('Telegram WebApp доступен');
+
         const user = window.Telegram.WebApp.user; // Получаем данные о пользователе
-        console.log('Данные о пользователе:', user);
+        console.log('Данные пользователя:', user); // Логирование данных пользователя
 
         if (user && user.photo_url) {
-          console.log('Аватарка пользователя найдена:', user.photo_url);
           const avatarUrl = user.photo_url; // Получаем аватарку пользователя
-          document.getElementById('avatar').src = avatarUrl; // Устанавливаем аватарку
+          console.log('Аватарка пользователя:', avatarUrl); // Логирование аватарки
+
+          // Устанавливаем аватарку в img элемент
+          document.getElementById('avatar').src = avatarUrl;
 
           // Выводим 123 в консоль, чтобы убедиться, что скрипт работает
           console.log('123');
         } else {
-          console.log('Данные пользователя или аватарка не найдены');
+          // Если данные пользователя или аватарка не получены, показываем ошибку
           document.getElementById('error-message').textContent = 'Не удалось загрузить данные о пользователе.';
           document.getElementById('error-message').style.display = 'block'; // Показываем ошибку
           document.body.style.display = 'none'; // Скрываем весь контент страницы
         }
       } else {
-        console.log('Telegram WebApp не доступен');
+        console.log('Telegram WebApp недоступен');
+        document.getElementById('error-message').textContent = 'Telegram WebApp недоступен.';
+        document.getElementById('error-message').style.display = 'block'; // Показываем ошибку
+        document.body.style.display = 'none'; // Скрываем весь контент страницы
       }
 
       function addCoins() {
