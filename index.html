@@ -8,6 +8,8 @@
       body { font-family: Arial; padding: 20px; text-align: center; }
       .balance { font-size: 20px; margin: 20px; }
       .avatar { border-radius: 50%; width: 100px; height: 100px; margin-bottom: 20px; }
+      .user-info { font-size: 16px; margin-top: 20px; }
+      .error { color: red; font-size: 18px; }
     </style>
   </head>
   <body>
@@ -16,15 +18,34 @@
     <p class="balance">Ваш баланс: <span id="balance">0</span> монет</p>
     <button onclick="addCoins()">Пополнить счёт</button>
 
+    <!-- Добавляем место для отображения информации о пользователе -->
+    <div id="user-info" class="user-info"></div>
+    <div id="error-message" class="error" style="display:none;"></div>
+
     <script>
       // Проверка, работает ли приложение через Telegram Web App
       if (window.Telegram && window.Telegram.WebApp) {
         const user = window.Telegram.WebApp.user; // Получаем данные о пользователе
-        console.log(user); // Выводим объект user в консоль для проверки
-        const avatarUrl = user ? user.photo_url : ''; // Получаем аватарку пользователя
 
-        if (avatarUrl) {
-          document.getElementById('avatar').src = avatarUrl; // Устанавливаем аватарку в img элемент
+        if (user && user.photo_url) {
+          const avatarUrl = user.photo_url; // Получаем аватарку пользователя
+
+          // Отображаем данные пользователя на странице
+          const userInfoDiv = document.getElementById('user-info');
+          userInfoDiv.innerHTML = `
+            <strong>Имя:</strong> ${user.first_name || 'Неизвестно'} <br>
+            <strong>Фамилия:</strong> ${user.last_name || 'Неизвестно'} <br>
+            <strong>Юзернейм:</strong> ${user.username || 'Неизвестно'} <br>
+            <strong>Аватар:</strong> ${avatarUrl ? '<img src="' + avatarUrl + '" alt="Аватарка пользователя" class="avatar">' : 'Нет аватарки'}
+          `;
+          
+          // Устанавливаем аватарку в img элемент
+          document.getElementById('avatar').src = avatarUrl;
+        } else {
+          // Если данные пользователя или аватарка не получены, показываем ошибку
+          document.getElementById('error-message').textContent = 'Не удалось загрузить данные о пользователе.';
+          document.getElementById('error-message').style.display = 'block'; // Показываем ошибку
+          document.body.style.display = 'none'; // Скрываем весь контент страницы
         }
       }
 
