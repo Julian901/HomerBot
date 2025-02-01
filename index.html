@@ -3,60 +3,48 @@
     <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, proxy-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <title>Моё приложение</title>
+    <title>Привет, пользователь!</title>
     <script async src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-      body { font-family: Arial; padding: 20px; text-align: center; }
-      .balance { font-size: 20px; margin: 20px; }
-      .avatar { border-radius: 50%; width: 100px; height: 100px; margin-bottom: 20px; }
-      .error { color: red; font-size: 18px; }
+      body {
+        font-family: Arial, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        background-color: #f0f0f0;
+      }
+      h1 {
+        font-size: 24px;
+        color: #333;
+      }
     </style>
   </head>
   <body>
-    <img id="avatar" class="avatar" src="" alt="Аватарка пользователя">
-    <h1>Привет, <span id="user-name">Пользователь</span>!</h1>
-    <p class="balance">Ваш баланс: <span id="balance">0</span> монет</p>
-    <button onclick="addCoins()">Пополнить счёт</button>
-
-    <div id="error-message" class="error" style="display:none;"></div>
+    <h1>Привет, пользователь!</h1>
 
     <script>
       console.log("Скрипт загружен");
 
-      // Проверка, работает ли приложение через Telegram Web App
+      // Проверяем, доступен ли Telegram WebApp
       if (window.tg && window.tg.WebApp) {
         console.log("Telegram WebApp доступен");
 
-        // Инициализация и ожидание готовности WebApp
+        // Инициализируем Telegram WebApp
         window.tg.WebApp.init();
 
-        // Получаем данные пользователя
-        const user = window.tg.WebApp.user;
-        console.log("Данные пользователя:", user);
+        // Получаем имя пользователя
+        const userName = window.tg.initDataUnsafe.user.first_name;
 
-        // Если пользователь авторизован, выводим его имя
-        if (user && user.first_name) {
-          console.log("Имя пользователя:", user.first_name);
-          document.getElementById('user-name').textContent = user.first_name; // Показываем имя на странице
-          if (user.photo_url) {
-            document.getElementById('avatar').src = user.photo_url; // Показываем аватарку пользователя
-          }
+        // Если имя пользователя существует, меняем текст на странице
+        if (userName) {
+          document.querySelector('h1').textContent = `Привет, ${userName}!`;
         } else {
-          console.log("Нет данных пользователя");
-          document.getElementById('error-message').textContent = 'Не удалось загрузить данные о пользователе.';
-          document.getElementById('error-message').style.display = 'block'; // Показываем ошибку
-          document.body.style.display = 'none'; // Скрываем весь контент страницы
+          console.log("Имя пользователя не найдено.");
         }
       } else {
-        console.log("Telegram WebApp недоступен");
-        document.getElementById('error-message').textContent = 'Telegram WebApp недоступен.';
-        document.getElementById('error-message').style.display = 'block'; // Показываем ошибку
-        document.body.style.display = 'none'; // Скрываем весь контент страницы
-      }
-
-      function addCoins() {
-        alert('Пополнение баланса...');
-        // Логика для обращения к Telegram API
+        console.log("Telegram WebApp недоступен.");
       }
     </script>
   </body>
