@@ -20,41 +20,34 @@
     <div id="error-message" class="error" style="display:none;"></div>
 
     <script>
-      // Асинхронная функция для получения данных о пользователе
-      async function getUserData() {
-        try {
-          if (window.Telegram && window.Telegram.WebApp) {
-            const user = window.Telegram.WebApp.user; // Получаем данные о пользователе
+      // Функция, которая будет вызываться, когда Telegram Web App инициализируется
+      window.addEventListener('load', function() {
+        // Проверяем, доступна ли библиотека Telegram Web App
+        if (window.Telegram && window.Telegram.WebApp) {
+          // Получаем информацию о пользователе
+          const user = window.Telegram.WebApp.user;
 
-            console.log('Полученные данные о пользователе:', user); // Выводим объект user в консоль
+          // Проверка и вывод в консоль
+          console.log('Полученные данные о пользователе:', user);
 
-            if (user) {
-              // Устанавливаем аватарку, если она есть
-              if (user.photo_url) {
-                const avatarUrl = user.photo_url;
-                document.getElementById('avatar').src = avatarUrl;
-              }
-
-              // Устанавливаем имя, если оно есть
-              const name = user.first_name || 'Пользователь!';
-              document.getElementById('greeting').textContent = `Привет, ${name}!`;
-
-              // Выводим 123 в консоль, чтобы убедиться, что скрипт работает
-              console.log('123');
-            } else {
-              // Если данные пользователя не получены, показываем ошибку
-              document.getElementById('error-message').textContent = 'Не удалось загрузить данные о пользователе.';
-              document.getElementById('error-message').style.display = 'block'; // Показываем ошибку
-              document.body.style.display = 'none'; // Скрываем весь контент страницы
-            }
+          // Устанавливаем аватарку, если она доступна
+          if (user && user.photo_url) {
+            document.getElementById('avatar').src = user.photo_url;
           }
-        } catch (error) {
-          console.error('Ошибка при получении данных о пользователе:', error);
-        }
-      }
 
-      // Вызываем функцию для получения данных
-      getUserData();
+          // Устанавливаем имя пользователя в приветствие
+          const name = user ? user.first_name || 'Пользователь' : 'Пользователь';
+          document.getElementById('greeting').textContent = `Привет, ${name}!`;
+
+          // Выводим "123" в консоль, чтобы убедиться, что скрипт работает
+          console.log('123');
+        } else {
+          // Если WebApp не доступен, показываем ошибку
+          document.getElementById('error-message').textContent = 'Не удалось загрузить данные о пользователе.';
+          document.getElementById('error-message').style.display = 'block';
+          document.body.style.display = 'none'; // Скрываем всю страницу
+        }
+      });
 
       function addCoins() {
         alert('Пополнение баланса...');
