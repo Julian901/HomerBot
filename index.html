@@ -1,0 +1,33 @@
+<html>
+  <head>
+    <title>Моё приложение</title>
+    <style>
+      body { font-family: Arial; padding: 20px; text-align: center; }
+      .balance { font-size: 20px; margin: 20px; }
+      .avatar { position: absolute; top: 20px; left: 20px; border-radius: 50%; width: 50px; height: 50px; }
+    </style>
+  </head>
+  <body>
+    <h1>Привет, пользователь!</h1>
+    <p class="balance">Ваш баланс: <span id="balance">0</span> монет</p>
+    <button onclick="addCoins()">Пополнить счёт</button>
+    <img id="avatar" class="avatar" src="" alt="Аватарка пользователя">
+
+    <script>
+      // Убедитесь, что приложение работает через Telegram Web App
+      if (window.Telegram && window.Telegram.WebApp) {
+        const user = window.Telegram.WebApp.initDataUnsafe; // Получаем данные о пользователе
+        const avatarUrl = user ? user.photo_url : ''; // Получаем аватарку пользователя
+
+        if (avatarUrl) {
+          document.getElementById('avatar').src = avatarUrl; // Устанавливаем аватарку в img элемент
+        }
+      }
+
+      function addCoins() {
+        alert('Пополнение баланса...');
+        // Здесь логика для обращения к Telegram API
+      }
+    </script>
+  </body>
+</html>
