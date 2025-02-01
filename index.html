@@ -4,7 +4,7 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     <title>Моё приложение</title>
-    <script async src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
       body { font-family: Arial; padding: 20px; text-align: center; }
       .balance { font-size: 20px; margin: 20px; }
@@ -24,6 +24,7 @@
       console.log("Скрипт загружен");
 
       // Проверка, работает ли приложение через Telegram Web App
+      let tg = window.Telegram.WebApp;
       if (window.Telegram && window.Telegram.WebApp) {
         console.log("Telegram WebApp доступен");
 
@@ -36,7 +37,7 @@
 
         // Если пользователь авторизован, выводим его имя
         if (user && user.first_name) {
-          console.log("Имя пользователя:", user.first_name);
+          console.log("Имя пользователя:", user.first_name, tg.initDataUnsafe.user.first_name);
           document.getElementById('user-name').textContent = user.first_name; // Показываем имя на странице
           if (user.photo_url) {
             document.getElementById('avatar').src = user.photo_url; // Показываем аватарку пользователя
