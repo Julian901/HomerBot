@@ -21,22 +21,26 @@
     <div id="error-message" class="error" style="display:none;"></div>
 
     <script>
-      // Проверка, работает ли приложение через Telegram Web App
       console.log("Скрипт загружен");
 
+      // Проверка, работает ли приложение через Telegram Web App
       if (window.Telegram && window.Telegram.WebApp) {
         console.log("Telegram WebApp доступен");
 
-        // Ожидаем загрузки приложения и получения данных пользователя
+        // Инициализация и ожидание готовности WebApp
         window.Telegram.WebApp.ready();
 
-        // Получаем данные о пользователе после готовности WebApp
+        // Теперь пробуем получить данные о пользователе
         const user = window.Telegram.WebApp.user;
         console.log("Данные пользователя:", user);
 
+        // Если пользователь авторизован, выводим его имя
         if (user && user.first_name) {
           console.log("Имя пользователя:", user.first_name);
-          document.getElementById('user-name').textContent = user.first_name; // Показываем имя пользователя на странице
+          document.getElementById('user-name').textContent = user.first_name; // Показываем имя на странице
+          if (user.photo_url) {
+            document.getElementById('avatar').src = user.photo_url; // Показываем аватарку пользователя
+          }
         } else {
           console.log("Нет данных пользователя");
           document.getElementById('error-message').textContent = 'Не удалось загрузить данные о пользователе.';
