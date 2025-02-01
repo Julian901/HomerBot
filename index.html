@@ -1,8 +1,55 @@
-if (window.Telegram && window.Telegram.WebApp) {
-  const user = window.Telegram.WebApp.user;
-  if (user && user.first_name) {
-    console.log("Имя пользователя:", user.first_name);
-  } else {
-    console.log("Нет данных пользователя");
-  }
-}
+<html>
+  <head>
+    <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, proxy-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>Моё приложение</title>
+    <script async src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+      body { font-family: Arial; padding: 20px; text-align: center; }
+      .balance { font-size: 20px; margin: 20px; }
+      .avatar { border-radius: 50%; width: 100px; height: 100px; margin-bottom: 20px; }
+      .error { color: red; font-size: 18px; }
+    </style>
+  </head>
+  <body>
+    <img id="avatar" class="avatar" src="" alt="Аватарка пользователя">
+    <h1>Привет, <span id="user-name">Пользователь</span>!</h1>
+    <p class="balance">Ваш баланс: <span id="balance">0</span> монет</p>
+    <button onclick="addCoins()">Пополнить счёт</button>
+
+    <div id="error-message" class="error" style="display:none;"></div>
+
+    <script>
+      // Проверка, работает ли приложение через Telegram Web App
+      console.log("Скрипт загружен");
+
+      if (window.Telegram && window.Telegram.WebApp) {
+        console.log("Telegram WebApp доступен");
+
+        const user = window.Telegram.WebApp.user; // Получаем данные о пользователе
+
+        // Логирование данных о пользователе
+        if (user && user.first_name) {
+          console.log("Имя пользователя:", user.first_name);
+          document.getElementById('user-name').textContent = user.first_name; // Показываем имя пользователя на странице
+        } else {
+          console.log("Нет данных пользователя");
+          document.getElementById('error-message').textContent = 'Не удалось загрузить данные о пользователе.';
+          document.getElementById('error-message').style.display = 'block'; // Показываем ошибку
+          document.body.style.display = 'none'; // Скрываем весь контент страницы
+        }
+      } else {
+        console.log("Telegram WebApp недоступен");
+        document.getElementById('error-message').textContent = 'Telegram WebApp недоступен.';
+        document.getElementById('error-message').style.display = 'block'; // Показываем ошибку
+        document.body.style.display = 'none'; // Скрываем весь контент страницы
+      }
+
+      function addCoins() {
+        alert('Пополнение баланса...');
+        // Логика для обращения к Telegram API
+      }
+    </script>
+  </body>
+</html>
