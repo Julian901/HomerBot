@@ -1,8 +1,8 @@
 <html>
   <head>
-<meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, proxy-revalidate">
-<meta http-equiv="Pragma" content="no-cache">
-<meta http-equiv="Expires" content="0">
+    <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, proxy-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>Моё приложение</title>
     <style>
       body { font-family: Arial; padding: 20px; text-align: center; }
@@ -12,14 +12,14 @@
   </head>
   <body>
     <img id="avatar" class="avatar" src="" alt="Аватарка пользователя">
-    <h1>Привет, пользователь!м</h1>
+    <h1>Привет, пользователь!</h1>
     <p class="balance">Ваш баланс: <span id="balance">0</span> монет</p>
     <button onclick="addCoins()">Пополнить счёт</button>
 
     <script>
-      // Убедитесь, что приложение работает через Telegram Web App
+      // Проверка, работает ли приложение через Telegram Web App
       if (window.Telegram && window.Telegram.WebApp) {
-        const user = window.Telegram.WebApp.initDataUnsafe; // Получаем данные о пользователе
+        const user = window.Telegram.WebApp.user; // Получаем данные о пользователе
         const avatarUrl = user ? user.photo_url : ''; // Получаем аватарку пользователя
 
         if (avatarUrl) {
@@ -29,7 +29,7 @@
 
       function addCoins() {
         alert('Пополнение баланса...');
-        // Здесь логика для обращения к Telegram API
+        // Логика для обращения к Telegram API
       }
     </script>
   </body>
