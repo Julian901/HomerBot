@@ -114,12 +114,12 @@
         </div>
         <h1 id="greeting">Привет, пользователь!</h1>
         <div class="points">
-          <div class="number">0</div>
+          <div class="number" id="balance">0</div>
           <div class="label">points</div>
         </div>
         <div class="buttons">
-          <button onclick="alert('Депозит')">Депозит</button>
-          <button onclick="alert('Вывод')">Вывод</button>
+          <button onclick="handleDeposit()">Депозит</button>
+          <button onclick="handleWithdraw()">Вывод</button>
         </div>
       </div>
     </div>
@@ -139,6 +139,9 @@
     <script>
       console.log("Скрипт загружен");
 
+      // URL вашего API на Railway
+      const API_URL = 'https://ваш-проект.up.railway.app';
+
       // Проверяем, доступен ли Telegram WebApp
       if (window.Telegram && window.Telegram.WebApp) {
         console.log("Telegram WebApp доступен");
@@ -155,11 +158,76 @@
           if (user.photo_url) {
             document.getElementById('user-avatar').src = user.photo_url;
           }
+
+          // Загружаем данные пользователя из API
+          fetchUserData(user.id);
         } else {
           console.log("Данные пользователя не найдены.");
         }
       } else {
         console.log("Telegram WebApp недоступен.");
+      }
+
+      // Функция для загрузки данных пользователя
+      async function fetchUserData(userId) {
+        try {
+          const response = await fetch(`${API_URL}/api/user/${userId}`);
+          const data = await response.json();
+          updateUI(data);
+        } catch (error) {
+          console.error('Ошибка при загрузке данных:', error);
+        }
+      }
+
+      // Функция для обновления интерфейса
+      function updateUI(data) {
+        document.getElementById('balance').textContent = data.balance;
+      }
+
+      // Обработка депозита
+      async function handleDeposit() {
+        const userId = window.Telegram.WebApp.initDataUnsafe.user.id;
+        const amount = 1000; // Пример суммы депозита
+
+        try {
+          const response = await fetch(`${API_URL}/api/deposit`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ userId, amount }),
+          });
+          const result = await response.json();
+          if (result.success) {
+            alert('Депозит успешно выполнен!');
+            fetchUserData(userId); // Обновляем данные
+          }
+        } catch (error) {
+          console.error('Ошибка при депозите:', error);
+        }
+      }
+
+      // Обработка вывода
+      async function handleWithdraw() {
+        const userId = window.Telegram.WebApp.initDataUnsafe.user.id;
+        const amount = 500; // Пример суммы вывода
+
+        try {
+          const response = await fetch(`${API_URL}/api/withdraw`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ userId, amount }),
+          });
+          const result = await response.json();
+          if (result.success) {
+            alert('Вывод успешно выполнен!');
+            fetchUserData(userId); // Обновляем данные
+          }
+        } catch (error) {
+          console.error('Ошибка при выводе:', error);
+        }
       }
 
       // Переключение между страницами
